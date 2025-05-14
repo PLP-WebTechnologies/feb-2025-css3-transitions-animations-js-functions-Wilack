@@ -1,0 +1,63 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const animationBox = document.getElementById('animation-box');
+    const saveBtn = document.getElementById('save-btn');
+    const usernameInput = document.getElementById('username');
+    const themeSelect = document.getElementById('theme');
+    const bounceBtn = document.getElementById('bounce-btn');
+    const spinBtn = document.getElementById('spin-btn');
+    const colorBtn = document.getElementById('color-btn');
+
+    // Load saved preferences
+    loadPreferences();
+
+    // Save preferences to localStorage
+    saveBtn.addEventListener('click', function() {
+        const preferences = {
+            username: usernameInput.value,
+            theme: themeSelect.value
+        };
+        localStorage.setItem('userPreferences', JSON.stringify(preferences));
+        applyTheme(preferences.theme);
+        alert('Preferences saved!');
+    });
+
+    // Animation triggers
+    animationBox.addEventListener('click', function() {
+        this.classList.toggle('bounce');
+    });
+
+    bounceBtn.addEventListener('click', function() {
+        resetAnimations();
+        animationBox.classList.add('bounce');
+    });
+
+    spinBtn.addEventListener('click', function() {
+        resetAnimations();
+        animationBox.classList.add('spin');
+    });
+
+    colorBtn.addEventListener('click', function() {
+        resetAnimations();
+        animationBox.classList.add('color-change');
+    });
+
+    // Helper functions
+    function loadPreferences() {
+        const savedPreferences = localStorage.getItem('userPreferences');
+        if (savedPreferences) {
+            const preferences = JSON.parse(savedPreferences);
+            usernameInput.value = preferences.username || '';
+            themeSelect.value = preferences.theme || 'light';
+            applyTheme(preferences.theme);
+        }
+    }
+
+    function applyTheme(theme) {
+        document.body.className = theme;
+    }
+
+    function resetAnimations() {
+        animationBox.classList.remove('bounce', 'spin', 'color-change');
+    }
+});
